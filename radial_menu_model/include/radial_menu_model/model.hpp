@@ -7,7 +7,9 @@
 #include <string>
 #include <vector>
 
-#include <radial_menu_model/item.hpp>
+// #include <radial_menu_model/item.hpp>
+// #include <radial_menu_model/action.hpp>
+#include <radial_menu_model/parse_from_xml.hpp>
 #include <radial_menu_msgs/State.h>
 #include <ros/console.h>
 #include <ros/exception.h>
@@ -98,9 +100,13 @@ public:
   // set new model tree description. also rests the state
   bool setDescription(const std::string &desc) {
     // populate items in the item tree
-    const std::vector< ItemConstPtr > new_items(Item::itemsFromDescription(desc));
-    if (new_items.empty()) {
-      ROS_ERROR("Model::setDescription(): No items");
+    // ROS_INFO("Model::Setdescription() : elementsFromDescription()");
+    const Element new_elements = elementsFromDescription(desc);
+    const std::vector < ItemConstPtr > new_items(new_elements.items);
+    const std::vector < ActionConstPtr > new_actions(new_elements.actions);
+
+    if (new_items.empty() && new_actions.empty()) {
+      ROS_ERROR("Model::setDescription(): No items or No actions");
       return false;
     }
 
@@ -113,6 +119,7 @@ public:
 
     // set new description (also reset the state)
     items_ = new_items;
+    actions_ = new_actions;
     current_level_ = new_current_level;
     state_ = defaultState();
     return true;
@@ -344,6 +351,8 @@ public:
     return Internal::toString(this, items_.front());
   }
 
+  std::vector< ActionConstPtr > getActions() const { return actions_; }
+
 protected:
   // ************
   // Internal use
@@ -367,6 +376,7 @@ protected:
 
 protected:
   std::vector< ItemConstPtr > items_;
+  std::vector< ActionConstPtr > actions_;
   ItemConstPtr current_level_;
   radial_menu_msgs::State state_;
 };

@@ -25,7 +25,7 @@ class Item : public std::enable_shared_from_this< Item > {
 public:
   enum DisplayType { Name, AltTxt, Image };
 
-protected:
+public:
   Item() {}
 
 public:
@@ -124,6 +124,76 @@ public:
   }
 
   // factory
+
+  static bool appendItems(const XmlElement &elm, std::vector< ItemConstPtr > *const items,
+                          const ItemPtr &item,
+                          const ItemPtr &parent_item = ItemPtr(), const int default_row = 0) {
+    // is the element name "item"?
+    if (elm.name() != "item") {
+      ROS_ERROR_STREAM("Item::appendItems(): Unexpected element '" << elm.name()
+                                                                            << "'");
+      return false;
+    }
+
+    // create an item and append it to the given list
+    // const ItemPtr item(new Item());
+    item->item_id_ = items->size();
+    items->push_back(item);
+
+    // associate the item with the parent
+    if (parent_item) {
+      const int row(elm.attribute("row", default_row));
+      if (row < 0 || row >= parent_item->children_.size()) {
+        ROS_ERROR_STREAM("Item::appendItems(): '" << row << "' is out of row range");
+        return false;
+      }
+      if (parent_item->children_[row]) {
+        ROS_ERROR_STREAM("Item::appendItems(): Multiple items in the row '" << row
+                                                                                      << "'");
+        return false;
+      }
+      parent_item->children_[row] = item;
+      item->parent_ = parent_item;
+    }
+
+    // load the item name from the attribute
+    if (!elm.getAttribute("name", &item->name_)) {
+      ROS_ERROR("Item::appendItems(): No attribute 'name'");
+      return false;
+    }
+
+    // load the display type from the attribute
+    const std::string display(elm.attribute< std::string >("display", "name"));
+    if (display == "name") {
+      item->display_type_ = Item::Name;
+    } else if (display == "alttxt") {
+      item->display_type_ = Item::AltTxt;
+      if (!elm.getAttribute("alttxt", &item->alt_txt_)) {
+        ROS_ERROR("Item::appendItems(): No attribute 'alttxt'");
+        return false;
+      }
+    } else if (display == "image") {
+      item->display_type_ = Item::Image;
+      if (!elm.getAttribute("imgurl", &item->img_url_)) {
+        ROS_ERROR("Item::appendItems(): No attribute 'imgurl'");
+        return false;
+      }
+    } else {
+      ROS_ERROR_STREAM("Item::appendItems(): Unknown display type '" << display
+                                                                              << "'");
+      return false;
+    }
+
+    // allocate child items
+    const int rows(elm.attribute("rows", elm.numChildElements()));
+    if (rows < 0) {
+      ROS_ERROR_STREAM("Item::appendItems(): Invalid row size '" << rows << "'");
+      return false;
+    }
+    item->children_.resize(rows);
+
+    return true;
+  }
 
   static std::vector< ItemConstPtr > itemsFromDescription(const std::string &desc) {
     struct Internal {
