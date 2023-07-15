@@ -1,6 +1,9 @@
 <item name="Teleop Mode" display="alttxt" alttxt="&#xf11b;">
     <item name="Base">
-        <item name="Pose"/>
+        <item name="Pose">
+            <action type="publish" topic="/foo" topic_type="std_msgs/String" values="hello" />
+            <action type="publish" topic="/foo2" topic_type="std_msgs/Float32" values="0.6" /> 
+        </item>
         <item name="Twist"/>
     </item>
     <item name="Arm">
