@@ -70,7 +70,7 @@ public:
     else if (action_->topic_type() == "std_msgs/Int8MultiArray")    { makePub< std_msgs::Int8MultiArray >(); }
     else if (action_->topic_type() == "std_msgs/UInt8")             { makePub< std_msgs::UInt8 >(); }
     else if (action_->topic_type() == "std_msgs/UInt8MultiArray")   { makePub< std_msgs::UInt8MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int16")             { makePub< std_msgs::Int8 >(); }
+    else if (action_->topic_type() == "std_msgs/Int16")             { makePub< std_msgs::Int16 >(); }
     else if (action_->topic_type() == "std_msgs/Int16MultiArray")   { makePub< std_msgs::Int16MultiArray >(); }
     else if (action_->topic_type() == "std_msgs/UInt16")            { makePub< std_msgs::UInt16 >(); }
     else if (action_->topic_type() == "std_msgs/UInt16MultiArray")  { makePub< std_msgs::UInt16MultiArray >(); }
@@ -102,7 +102,7 @@ public:
     else if (action_->topic_type() == "std_msgs/Int8MultiArray")    { publish< std_msgs::Int8MultiArray >(); }
     else if (action_->topic_type() == "std_msgs/UInt8")             { publish< std_msgs::UInt8 >(); }
     else if (action_->topic_type() == "std_msgs/UInt8MultiArray")   { publish< std_msgs::UInt8MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int16")             { publish< std_msgs::Int8 >(); }
+    else if (action_->topic_type() == "std_msgs/Int16")             { publish< std_msgs::Int16 >(); }
     else if (action_->topic_type() == "std_msgs/Int16MultiArray")   { publish< std_msgs::Int16MultiArray >(); }
     else if (action_->topic_type() == "std_msgs/UInt16")            { publish< std_msgs::UInt16 >(); }
     else if (action_->topic_type() == "std_msgs/UInt16MultiArray")  { publish< std_msgs::UInt16MultiArray >(); }
