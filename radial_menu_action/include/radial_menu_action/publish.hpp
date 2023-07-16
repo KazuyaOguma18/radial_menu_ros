@@ -33,11 +33,11 @@
 #include <type_traits>
 
 namespace radial_menu_action {
-template<class>
+template< class >
 struct is_vector : std::false_type {};
 
-template <class T, class ALLOCATOR>
-struct is_vector<std::vector<T, ALLOCATOR> > : std::true_type {};
+template < class T, class ALLOCATOR >
+struct is_vector< std::vector< T, ALLOCATOR > > : std::true_type {};
 
 class Publish : public BaseAction {
 public:
@@ -72,30 +72,6 @@ public:
     }
   }
 
-  template < typename M >
-  void makePub() {
-    pub_ = nh_.advertise< M >(action_->topic(), 10);
-  }
-
-  // array
-  template < typename M >
-  typename std::enable_if<is_vector< typename M::_data_type >::value>::type
-  publish() const {
-    M msg;
-    msg.data = action_->values< typename M::_data_type::value_type >();
-    // msg.data = action_->values< double >();
-    pub_.publish(msg);
-  }
-
-  // non array
-  template < typename M >
-  typename std::enable_if<!is_vector< typename M::_data_type >::value>::type
-  publish() const {
-    M msg;
-    msg.data = action_->values< typename M::_data_type >()[0];
-    pub_.publish(msg);
-  }  
-
   virtual void execute() const override {
     // ROS_INFO("Publish::execute()");
     if      (action_->topic_type() == "std_msgs/String")            { publish< std_msgs::String >(); }
@@ -124,6 +100,31 @@ public:
     else if (action_->topic_type() == "std_msgs/UInt64")            { publish< std_msgs::UInt64 >(); }
     else if (action_->topic_type() == "std_msgs/UInt64MultiArray")  { publish< std_msgs::UInt64MultiArray >(); }
   }
+
+private:
+  template < typename M >
+  void makePub() {
+    pub_ = nh_.advertise< M >(action_->topic(), 10);
+  }
+
+  // array
+  template < typename M >
+  typename std::enable_if<is_vector< typename M::_data_type >::value>::type
+  publish() const {
+    M msg;
+    msg.data = action_->values< typename M::_data_type::value_type >();
+    // msg.data = action_->values< double >();
+    pub_.publish(msg);
+  }
+
+  // non array
+  template < typename M >
+  typename std::enable_if<!is_vector< typename M::_data_type >::value>::type
+  publish() const {
+    M msg;
+    msg.data = action_->values< typename M::_data_type >()[0];
+    pub_.publish(msg);
+  }  
 
 private:
   ros::NodeHandle nh_;
