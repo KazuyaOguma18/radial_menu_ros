@@ -43,19 +43,20 @@ public:
 
   void stateCallback(const radial_menu_msgs::StateConstPtr &msg) {
 
-    // NODELET_INFO_STREAM("State : " << msg->pointed_id);
+    static int last_pointed_id = -1;
 
     // check last enabled state
     static bool last_enabled = false;
     if (!(!msg->is_enabled && last_enabled)){
       last_enabled = msg->is_enabled;
+      last_pointed_id = msg->pointed_id;
       return;
     }
     last_enabled = msg->is_enabled;
 
     // Search menu from id
     for (const auto &action : actions_) {
-      if (action->id() == msg->pointed_id) {
+      if (action->id() == last_pointed_id) {
         action->execute();
       }
     }
