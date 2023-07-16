@@ -32,6 +32,9 @@ public:
       if (action->type() == "publish") {
         actions_.push_back(std::make_shared<Publish>(action));
       }
+      else if (action->type() == "service") {
+        actions_.push_back(std::make_shared<Service>(action));
+      }
     }
 
 
