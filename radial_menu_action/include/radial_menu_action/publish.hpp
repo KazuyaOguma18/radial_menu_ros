@@ -7,6 +7,7 @@
 #include <std_msgs/Byte.h>
 #include <std_msgs/ByteMultiArray.h>
 #include <std_msgs/Char.h>
+#include <std_msgs/Empty.h>
 #include <std_msgs/Float32.h>
 #include <std_msgs/Float32MultiArray.h>
 #include <std_msgs/Float64.h>
@@ -39,6 +40,19 @@ struct is_vector : std::false_type {};
 template < class T, class ALLOCATOR >
 struct is_vector< std::vector< T, ALLOCATOR > > : std::true_type {};
 
+template <typename T>
+struct is_data_type {
+private:
+    template <typename C>
+    static constexpr std::true_type test(typename C::_data_type*);
+
+    template <typename>
+    static constexpr std::false_type test(...);
+
+public:
+    static constexpr bool value = decltype(test<T>(nullptr))::value;
+};
+
 class Publish : public BaseAction {
 public:
   Publish(const radial_menu_model::ActionConstPtr &action) : BaseAction(action){
@@ -47,6 +61,7 @@ public:
     else if (action_->topic_type() == "std_msgs/Byte")              { makePub< std_msgs::Byte >(); }
     else if (action_->topic_type() == "std_msgs/ByteMultiArray")    { makePub< std_msgs::ByteMultiArray >(); }
     else if (action_->topic_type() == "std_msgs/Char")              { makePub< std_msgs::Char >(); }
+    else if (action_->topic_type() == "std_msgs/Empty")             { makePub< std_msgs::Empty >(); }
     else if (action_->topic_type() == "std_msgs/Float32")           { makePub< std_msgs::Float32 >(); }
     else if (action_->topic_type() == "std_msgs/Float32MultiArray") { makePub< std_msgs::Float32MultiArray >(); }
     else if (action_->topic_type() == "std_msgs/Float64")           { makePub< std_msgs::Float64 >(); }
@@ -73,12 +88,12 @@ public:
   }
 
   virtual void execute() const override {
-    // ROS_INFO("Publish::execute()");
     if      (action_->topic_type() == "std_msgs/String")            { publish< std_msgs::String >(); }
     else if (action_->topic_type() == "std_msgs/Bool")              { publish< std_msgs::Bool >(); }
     else if (action_->topic_type() == "std_msgs/Byte")              { publish< std_msgs::Byte >(); }
     else if (action_->topic_type() == "std_msgs/ByteMultiArray")    { publish< std_msgs::ByteMultiArray >(); }
     else if (action_->topic_type() == "std_msgs/Char")              { publish< std_msgs::Char >(); }
+    else if (action_->topic_type() == "std_msgs/Empty")             { publish< std_msgs::Empty >(); }
     else if (action_->topic_type() == "std_msgs/Float32")           { publish< std_msgs::Float32 >(); }
     else if (action_->topic_type() == "std_msgs/Float32MultiArray") { publish< std_msgs::Float32MultiArray >(); }
     else if (action_->topic_type() == "std_msgs/Float64")           { publish< std_msgs::Float64 >(); }
@@ -119,12 +134,19 @@ private:
 
   // non array
   template < typename M >
-  typename std::enable_if<!is_vector< typename M::_data_type >::value>::type
+  typename std::enable_if<!is_vector< typename M::_data_type >::value && is_data_type< M >::value>::type
   publish() const {
     M msg;
     msg.data = action_->values< typename M::_data_type >()[0];
     pub_.publish(msg);
-  }  
+  }
+
+  template < typename M >
+  typename std::enable_if<!is_data_type< M >::value>::type
+  publish() const {
+    M msg;
+    pub_.publish(msg);
+  }
 
 private:
   ros::NodeHandle nh_;
