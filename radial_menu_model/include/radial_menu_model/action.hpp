@@ -17,7 +17,7 @@ typedef std::shared_ptr<const Action> ActionConstPtr;
 class Action : public std::enable_shared_from_this< Action > {
 
 protected:
-  Action() {}
+  Action() : elm(){}
 
 public:
   virtual ~Action() {}
@@ -64,6 +64,8 @@ public:
       return false;
     }
 
+    action->elm.reset(new XmlElement(elm));
+
     if (action->type_ == "publish" || action->type_ == "service") {
       if (!elm.getAttribute("topic", &action->topic_)) {
         ROS_ERROR("Action::appendActions(): No attribute 'topic'");
@@ -93,9 +95,10 @@ protected:
   // Publish & Servise
   std::string topic_, topic_type_;
 
-
   std::string values_;
 
+public:
+  XmlElementConstPtr elm;
 };
 
 
