@@ -16,6 +16,8 @@ public:
     action_.reset(new radial_menu_model::Action(*action));
   }
 
+  virtual bool init() = 0;
+
   virtual void execute() const = 0;
 
   const int32_t id() const { return action_->id(); }

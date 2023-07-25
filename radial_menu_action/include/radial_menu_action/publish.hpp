@@ -56,6 +56,16 @@ public:
 class Publish : public BaseAction {
 public:
   Publish(const radial_menu_model::ActionConstPtr &action) : BaseAction(action){
+
+  }
+
+  virtual bool init() override {
+    // Check Elements 
+
+
+    //
+
+
     if      (action_->topic_type() == "std_msgs/String")            { makePub< std_msgs::String >(); }
     else if (action_->topic_type() == "std_msgs/Bool")              { makePub< std_msgs::Bool >(); }
     else if (action_->topic_type() == "std_msgs/Byte")              { makePub< std_msgs::Byte >(); }
@@ -83,8 +93,10 @@ public:
     else if (action_->topic_type() == "std_msgs/UInt64")            { makePub< std_msgs::UInt64 >(); }
     else if (action_->topic_type() == "std_msgs/UInt64MultiArray")  { makePub< std_msgs::UInt64MultiArray >(); }
     else {
-      throw ros::Exception("radial_menu_action::Publish : Invalid topic type ( " + action_->topic_type() + " )");
+      ROS_ERROR_STREAM("radial_menu_action::Publish : Invalid topic type ( " + action_->topic_type() + " )");
+      return false;
     }
+    return true;
   }
 
   virtual void execute() const override {
@@ -141,6 +153,7 @@ private:
     pub_.publish(msg);
   }
 
+  // std_msgs::Empty
   template < typename M >
   typename std::enable_if<!is_data_type< M >::value>::type
   publish() const {

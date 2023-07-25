@@ -13,11 +13,21 @@ namespace radial_menu_action {
 
 class Service : public BaseAction {
 public:
-  Service(const radial_menu_model::ActionConstPtr &action) : BaseAction(action){
+  Service(const radial_menu_model::ActionConstPtr &action) : BaseAction(action){}
+
+  virtual bool init() override {
+    // Check Elements 
+
+
+    //
+
+    
     if (action_->topic_type() == "std_srvs/Empty")        { makeClient<std_srvs::Empty>(); }
     else if (action_->topic_type() == "std_srvs/SetBool") { makeClient<std_srvs::SetBool>(); }
     else if (action_->topic_type() == "std_srvs/Trigger") { makeClient<std_srvs::Trigger>(); }
-  }
+    else { return false; }
+    return true;
+  } 
 
   virtual void execute() const override;
 

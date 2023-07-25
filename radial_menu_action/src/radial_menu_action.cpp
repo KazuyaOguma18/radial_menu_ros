@@ -2,10 +2,6 @@
 #include <nodelet/nodelet.h>
 #include <pluginlib/class_list_macros.h>
 
-#include <std_msgs/String.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/Float64.h>
-
 #include <radial_menu_action/publish.hpp>
 #include <radial_menu_action/service.hpp>
 
@@ -37,6 +33,11 @@ public:
       }
     }
 
+    for (auto& action : actions_) {
+      if(!action->init()) {
+        throw ros::Exception("Failed to action initialize");
+      }
+    }
 
     state_sub_ = nh_.subscribe<radial_menu_msgs::State>("menu_state", 1, &RadialMenuAction::stateCallback, this);
   }
@@ -67,7 +68,7 @@ protected:
   ros::Subscriber state_sub_;
   radial_menu_model::ModelPtr model_;
 
-   std::vector< BaseActionConstPtr > actions_;
+   std::vector< BaseActionPtr > actions_;
 };
 } // namespace radial_menu_action
 
