@@ -16,9 +16,8 @@ bool is_exist(const std::vector< T > vals, const T& key) {
 
 class SharedValues : public BaseAction {
 public:
-  SharedValues(const radial_menu_model::ActionConstPtr &action, const SharedPtr& shared) 
+  SharedValues(const radial_menu_model::ActionConstPtr &action) 
    : BaseAction(action), 
-     shared_(shared),
      method_list_({"round_robin", "bidirectional+", "bidirectional-"}) {
   }
 
@@ -50,20 +49,20 @@ public:
 
     //////////////////////////////////////////////////////////////
 
-    shared_->add(key_, current_val_);
-    shared_->add(key_ + "_index", initial_);
+    Shared::add(key_, current_val_);
+    Shared::add(key_ + "_index", initial_);
 
     return true;
   }
 
   virtual void execute() const override {
     current_val_ = select();
-    shared_->add(key_, current_val_);
+    Shared::add(key_, current_val_);
     ROS_INFO_STREAM("SharedValues::execute(): add key='" << key_  << "', value='" << current_val_ << "'");
   }
 
   std::string select() const {
-    const int current_index = stoi(shared_->get(key_ + "_index"));
+    const int current_index = stoi(Shared::get(key_ + "_index"));
     int next_index = current_index;
     if (method_ == "round_robin") {
       next_index++;
@@ -83,12 +82,11 @@ public:
         next_index = 0;
       }      
     }
-    shared_->add(key_ + "_index", std::to_string(next_index));
+    Shared::add(key_ + "_index", std::to_string(next_index));
     return values_vec_.at(next_index);
   }
 
 private:
-  const std::shared_ptr<Shared> shared_;
   std::string key_, values_str_, method_, initial_;
   std::vector<std::string> values_vec_;
   const std::vector<std::string> method_list_;

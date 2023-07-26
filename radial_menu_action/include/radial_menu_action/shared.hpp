@@ -14,41 +14,45 @@ class Shared {
 public:
   Shared() {}
 
-  void add(const std::string& key, const std::string& val) {
+  static void add(const std::string& key, const std::string& val) {
     std::lock_guard<std::mutex> lock(mtx_);
     mapstr_[key] = val;
   }
 
-  void remove(const std::string& key) {
+  static void remove(const std::string& key) {
     std::lock_guard<std::mutex> lock(mtx_);
     if (mapstr_.find(key) != mapstr_.end()) {
       mapstr_.erase(key);
     }
   }
 
-  std::string get_required(const std::string& key) const {
+  static std::string get_required(const std::string& key) {
     return mapstr_.at(key);
   }
 
-  std::string get(const std::string& key, const std::string& default_val = "") const {
+  static std::string get(const std::string& key, const std::string& default_val = "") {
     if (mapstr_.find(key) == mapstr_.end()) {
       return default_val;
     }
     return mapstr_.at(key);
   }
 
-  void set(const std::string& key, const std::string& val) {
-    this->add(key, val);
+  static void set(const std::string& key, const std::string& val) {
+    add(key, val);
   }
 
-  bool has(const std::string& key) const {
+  static bool has(const std::string& key) {
     return mapstr_.find(key) != mapstr_.end();
   }
 
 private:
-  std::map<std::string, std::string> mapstr_;
-  std::mutex mtx_;
+  static std::map<std::string, std::string> mapstr_;
+  static std::mutex mtx_;
 };
+
+std::map<std::string, std::string> Shared::mapstr_ = {};
+std::mutex Shared::mtx_;
+
 } // namespace radial_menu_action
 
 
