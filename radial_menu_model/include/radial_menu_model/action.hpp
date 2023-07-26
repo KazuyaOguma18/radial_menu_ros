@@ -24,10 +24,7 @@ public:
 
   const std::string &type() const { return type_; }
 
-  const std::string &topic() const { return topic_; }
-  const std::string &topic_type() const { return topic_type_; }
   const int32_t &id() const { return item_id_; }
-  const std::string &values() const { return values_; }
 
   template <typename T>
   const std::vector< T > values() const {
@@ -65,23 +62,6 @@ public:
     }
 
     action->elm.reset(new XmlElement(elm));
-
-    if (action->type_ == "publish" || action->type_ == "service") {
-      if (!elm.getAttribute("topic", &action->topic_)) {
-        ROS_ERROR("Action::appendActions(): No attribute 'topic'");
-        return false;
-      }
-
-      if (!elm.getAttribute("topic_type", &action->topic_type_)) {
-        ROS_ERROR("Action::appendActions(): No attribute 'topic_type'");
-        return false;
-      }      
-    }
-
-    if (!elm.getAttribute("values", &action->values_)) {
-      ROS_ERROR("Action::appendActions(): No attribute 'values'");
-      return false;
-    } 
 
     // ROS_INFO_STREAM("Appending actions : " << action->topic_);
     return true;

@@ -55,83 +55,88 @@ public:
 
 class Publish : public BaseAction {
 public:
-  Publish(const radial_menu_model::ActionConstPtr &action) : BaseAction(action){
-
-  }
+  Publish(const radial_menu_model::ActionConstPtr &action) : BaseAction(action){}
 
   virtual bool init() override {
-    // Check Elements 
+    // Check Elements ------------------------------------------    
+    // topic
+    if (!get_attribute("topic", topic_)) { return false; }
+
+    // topic_type
+    if (!get_attribute("topic_type", topic_type_)) { return false; }
+
+    // key
+    if (!get_attribute("values", values_)) { return false; }
+
+    //////////////////////////////////////////////////////////////
 
 
-    //
-
-
-    if      (action_->topic_type() == "std_msgs/String")            { makePub< std_msgs::String >(); }
-    else if (action_->topic_type() == "std_msgs/Bool")              { makePub< std_msgs::Bool >(); }
-    else if (action_->topic_type() == "std_msgs/Byte")              { makePub< std_msgs::Byte >(); }
-    else if (action_->topic_type() == "std_msgs/ByteMultiArray")    { makePub< std_msgs::ByteMultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Char")              { makePub< std_msgs::Char >(); }
-    else if (action_->topic_type() == "std_msgs/Empty")             { makePub< std_msgs::Empty >(); }
-    else if (action_->topic_type() == "std_msgs/Float32")           { makePub< std_msgs::Float32 >(); }
-    else if (action_->topic_type() == "std_msgs/Float32MultiArray") { makePub< std_msgs::Float32MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Float64")           { makePub< std_msgs::Float64 >(); }
-    else if (action_->topic_type() == "std_msgs/Float64MultiArray") { makePub< std_msgs::Float64MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int8")              { makePub< std_msgs::Int8 >(); }
-    else if (action_->topic_type() == "std_msgs/Int8MultiArray")    { makePub< std_msgs::Int8MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/UInt8")             { makePub< std_msgs::UInt8 >(); }
-    else if (action_->topic_type() == "std_msgs/UInt8MultiArray")   { makePub< std_msgs::UInt8MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int16")             { makePub< std_msgs::Int16 >(); }
-    else if (action_->topic_type() == "std_msgs/Int16MultiArray")   { makePub< std_msgs::Int16MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/UInt16")            { makePub< std_msgs::UInt16 >(); }
-    else if (action_->topic_type() == "std_msgs/UInt16MultiArray")  { makePub< std_msgs::UInt16MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int32")             { makePub< std_msgs::Int32 >(); }
-    else if (action_->topic_type() == "std_msgs/Int32MultiArray")   { makePub< std_msgs::Int32MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/UInt32")            { makePub< std_msgs::UInt32 >(); }
-    else if (action_->topic_type() == "std_msgs/UInt32MultiArray")  { makePub< std_msgs::UInt32MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int64")             { makePub< std_msgs::Int64 >(); }
-    else if (action_->topic_type() == "std_msgs/Int64MultiArray")   { makePub< std_msgs::Int64MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/UInt64")            { makePub< std_msgs::UInt64 >(); }
-    else if (action_->topic_type() == "std_msgs/UInt64MultiArray")  { makePub< std_msgs::UInt64MultiArray >(); }
+    if      (topic_type_ == "std_msgs/String")            { makePub< std_msgs::String >(); }
+    else if (topic_type_ == "std_msgs/Bool")              { makePub< std_msgs::Bool >(); }
+    else if (topic_type_ == "std_msgs/Byte")              { makePub< std_msgs::Byte >(); }
+    else if (topic_type_ == "std_msgs/ByteMultiArray")    { makePub< std_msgs::ByteMultiArray >(); }
+    else if (topic_type_ == "std_msgs/Char")              { makePub< std_msgs::Char >(); }
+    else if (topic_type_ == "std_msgs/Empty")             { makePub< std_msgs::Empty >(); }
+    else if (topic_type_ == "std_msgs/Float32")           { makePub< std_msgs::Float32 >(); }
+    else if (topic_type_ == "std_msgs/Float32MultiArray") { makePub< std_msgs::Float32MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Float64")           { makePub< std_msgs::Float64 >(); }
+    else if (topic_type_ == "std_msgs/Float64MultiArray") { makePub< std_msgs::Float64MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Int8")              { makePub< std_msgs::Int8 >(); }
+    else if (topic_type_ == "std_msgs/Int8MultiArray")    { makePub< std_msgs::Int8MultiArray >(); }
+    else if (topic_type_ == "std_msgs/UInt8")             { makePub< std_msgs::UInt8 >(); }
+    else if (topic_type_ == "std_msgs/UInt8MultiArray")   { makePub< std_msgs::UInt8MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Int16")             { makePub< std_msgs::Int16 >(); }
+    else if (topic_type_ == "std_msgs/Int16MultiArray")   { makePub< std_msgs::Int16MultiArray >(); }
+    else if (topic_type_ == "std_msgs/UInt16")            { makePub< std_msgs::UInt16 >(); }
+    else if (topic_type_ == "std_msgs/UInt16MultiArray")  { makePub< std_msgs::UInt16MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Int32")             { makePub< std_msgs::Int32 >(); }
+    else if (topic_type_ == "std_msgs/Int32MultiArray")   { makePub< std_msgs::Int32MultiArray >(); }
+    else if (topic_type_ == "std_msgs/UInt32")            { makePub< std_msgs::UInt32 >(); }
+    else if (topic_type_ == "std_msgs/UInt32MultiArray")  { makePub< std_msgs::UInt32MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Int64")             { makePub< std_msgs::Int64 >(); }
+    else if (topic_type_ == "std_msgs/Int64MultiArray")   { makePub< std_msgs::Int64MultiArray >(); }
+    else if (topic_type_ == "std_msgs/UInt64")            { makePub< std_msgs::UInt64 >(); }
+    else if (topic_type_ == "std_msgs/UInt64MultiArray")  { makePub< std_msgs::UInt64MultiArray >(); }
     else {
-      ROS_ERROR_STREAM("radial_menu_action::Publish : Invalid topic type ( " + action_->topic_type() + " )");
+      ROS_ERROR_STREAM("radial_menu_action::Publish : Invalid topic type ( " + topic_type_ + " )");
       return false;
     }
     return true;
   }
 
   virtual void execute() const override {
-    if      (action_->topic_type() == "std_msgs/String")            { publish< std_msgs::String >(); }
-    else if (action_->topic_type() == "std_msgs/Bool")              { publish< std_msgs::Bool >(); }
-    else if (action_->topic_type() == "std_msgs/Byte")              { publish< std_msgs::Byte >(); }
-    else if (action_->topic_type() == "std_msgs/ByteMultiArray")    { publish< std_msgs::ByteMultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Char")              { publish< std_msgs::Char >(); }
-    else if (action_->topic_type() == "std_msgs/Empty")             { publish< std_msgs::Empty >(); }
-    else if (action_->topic_type() == "std_msgs/Float32")           { publish< std_msgs::Float32 >(); }
-    else if (action_->topic_type() == "std_msgs/Float32MultiArray") { publish< std_msgs::Float32MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Float64")           { publish< std_msgs::Float64 >(); }
-    else if (action_->topic_type() == "std_msgs/Float64MultiArray") { publish< std_msgs::Float64MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int8")              { publish< std_msgs::Int8 >(); }
-    else if (action_->topic_type() == "std_msgs/Int8MultiArray")    { publish< std_msgs::Int8MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/UInt8")             { publish< std_msgs::UInt8 >(); }
-    else if (action_->topic_type() == "std_msgs/UInt8MultiArray")   { publish< std_msgs::UInt8MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int16")             { publish< std_msgs::Int16 >(); }
-    else if (action_->topic_type() == "std_msgs/Int16MultiArray")   { publish< std_msgs::Int16MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/UInt16")            { publish< std_msgs::UInt16 >(); }
-    else if (action_->topic_type() == "std_msgs/UInt16MultiArray")  { publish< std_msgs::UInt16MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int32")             { publish< std_msgs::Int32 >(); }
-    else if (action_->topic_type() == "std_msgs/Int32MultiArray")   { publish< std_msgs::Int32MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/UInt32")            { publish< std_msgs::UInt32 >(); }
-    else if (action_->topic_type() == "std_msgs/UInt32MultiArray")  { publish< std_msgs::UInt32MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/Int64")             { publish< std_msgs::Int64 >(); }
-    else if (action_->topic_type() == "std_msgs/Int64MultiArray")   { publish< std_msgs::Int64MultiArray >(); }
-    else if (action_->topic_type() == "std_msgs/UInt64")            { publish< std_msgs::UInt64 >(); }
-    else if (action_->topic_type() == "std_msgs/UInt64MultiArray")  { publish< std_msgs::UInt64MultiArray >(); }
+    if      (topic_type_ == "std_msgs/String")            { publish< std_msgs::String >(); }
+    else if (topic_type_ == "std_msgs/Bool")              { publish< std_msgs::Bool >(); }
+    else if (topic_type_ == "std_msgs/Byte")              { publish< std_msgs::Byte >(); }
+    else if (topic_type_ == "std_msgs/ByteMultiArray")    { publish< std_msgs::ByteMultiArray >(); }
+    else if (topic_type_ == "std_msgs/Char")              { publish< std_msgs::Char >(); }
+    else if (topic_type_ == "std_msgs/Empty")             { publish< std_msgs::Empty >(); }
+    else if (topic_type_ == "std_msgs/Float32")           { publish< std_msgs::Float32 >(); }
+    else if (topic_type_ == "std_msgs/Float32MultiArray") { publish< std_msgs::Float32MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Float64")           { publish< std_msgs::Float64 >(); }
+    else if (topic_type_ == "std_msgs/Float64MultiArray") { publish< std_msgs::Float64MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Int8")              { publish< std_msgs::Int8 >(); }
+    else if (topic_type_ == "std_msgs/Int8MultiArray")    { publish< std_msgs::Int8MultiArray >(); }
+    else if (topic_type_ == "std_msgs/UInt8")             { publish< std_msgs::UInt8 >(); }
+    else if (topic_type_ == "std_msgs/UInt8MultiArray")   { publish< std_msgs::UInt8MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Int16")             { publish< std_msgs::Int16 >(); }
+    else if (topic_type_ == "std_msgs/Int16MultiArray")   { publish< std_msgs::Int16MultiArray >(); }
+    else if (topic_type_ == "std_msgs/UInt16")            { publish< std_msgs::UInt16 >(); }
+    else if (topic_type_ == "std_msgs/UInt16MultiArray")  { publish< std_msgs::UInt16MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Int32")             { publish< std_msgs::Int32 >(); }
+    else if (topic_type_ == "std_msgs/Int32MultiArray")   { publish< std_msgs::Int32MultiArray >(); }
+    else if (topic_type_ == "std_msgs/UInt32")            { publish< std_msgs::UInt32 >(); }
+    else if (topic_type_ == "std_msgs/UInt32MultiArray")  { publish< std_msgs::UInt32MultiArray >(); }
+    else if (topic_type_ == "std_msgs/Int64")             { publish< std_msgs::Int64 >(); }
+    else if (topic_type_ == "std_msgs/Int64MultiArray")   { publish< std_msgs::Int64MultiArray >(); }
+    else if (topic_type_ == "std_msgs/UInt64")            { publish< std_msgs::UInt64 >(); }
+    else if (topic_type_ == "std_msgs/UInt64MultiArray")  { publish< std_msgs::UInt64MultiArray >(); }
   }
 
 private:
   template < typename M >
   void makePub() {
-    pub_ = nh_.advertise< M >(action_->topic(), 10);
+    pub_ = nh_.advertise< M >(topic_, 10);
   }
 
   // array
@@ -139,7 +144,7 @@ private:
   typename std::enable_if<is_vector< typename M::_data_type >::value>::type
   publish() const {
     M msg;
-    msg.data = action_->values< typename M::_data_type::value_type >();
+    msg.data = values< typename M::_data_type::value_type >(values_);
     // msg.data = action_->values< double >();
     pub_.publish(msg);
   }
@@ -149,7 +154,7 @@ private:
   typename std::enable_if<!is_vector< typename M::_data_type >::value && is_data_type< M >::value>::type
   publish() const {
     M msg;
-    msg.data = action_->values< typename M::_data_type >()[0];
+    msg.data = values< typename M::_data_type >(values_)[0];
     pub_.publish(msg);
   }
 
@@ -164,6 +169,8 @@ private:
 private:
   ros::NodeHandle nh_;
   ros::Publisher pub_;
+
+  std::string topic_, topic_type_, values_;
 };
 
 

@@ -8,9 +8,9 @@
 namespace radial_menu_action {
 
 template <typename T>
-const std::vector< T > values(const std::string& values) {
+const std::vector< T > values(const std::string& values_str) {
 
-  std::istringstream iss(values);
+  std::istringstream iss(values_str);
   std::vector< T > outputs;
 
   T v;
@@ -18,6 +18,11 @@ const std::vector< T > values(const std::string& values) {
     outputs.push_back(v);
   }
   return outputs;
+}
+
+template <typename T>
+const T to_value(const std::string& values_str) {
+  return values< T >(values_str)[0];
 }
 
 template <typename T>
