@@ -5,6 +5,7 @@
 #include <radial_menu_action/publish.hpp>
 #include <radial_menu_action/service.hpp>
 #include <radial_menu_action/shared_values.hpp>
+#include <radial_menu_action/publish_shared_value.hpp>
 
 #include <radial_menu_msgs/State.h>
 
@@ -19,7 +20,6 @@ public:
     nh_ = getNodeHandle();
     pnh_ = getPrivateNodeHandle();
     model_.reset(new radial_menu_model::Model());
-    shared_.reset(new Shared());
 
     if (!model_->setDescriptionFromParam(nh_.resolveName("menu_description"))) {
       throw ros::Exception("Cannot set a model description from the param '" +
@@ -35,7 +35,10 @@ public:
         actions_.push_back(std::make_shared<Service>(action));
       }
       else if (action->type() == "shared_values"){
-        actions_.push_back(std::make_shared<SharedValues>(action, shared_));
+        actions_.push_back(std::make_shared<SharedValues>(action));
+      }
+      else if (action->type() == "publish_shared_value"){
+        actions_.push_back(std::make_shared<PublishSharedValue>(action));
       }
     }
 
@@ -75,7 +78,6 @@ protected:
   radial_menu_model::ModelPtr model_;
 
   std::vector< BaseActionPtr > actions_;
-  SharedPtr shared_;
 };
 } // namespace radial_menu_action
 
