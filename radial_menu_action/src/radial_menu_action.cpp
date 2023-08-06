@@ -6,6 +6,8 @@
 #include <radial_menu_action/service.hpp>
 #include <radial_menu_action/shared_values.hpp>
 #include <radial_menu_action/publish_shared_value.hpp>
+#include <radial_menu_action/flipper_named_state.hpp>
+#include <radial_menu_action/movegroup_named_state.hpp>
 
 #include <radial_menu_msgs/State.h>
 
@@ -39,6 +41,12 @@ public:
       }
       else if (action->type() == "publish_shared_value"){
         actions_.push_back(std::make_shared<PublishSharedValue>(action));
+      }
+      else if (action->type() == "flipper_named_state"){
+        actions_.push_back(std::make_shared<FlipperNamedState>(action));
+      }
+      else if (action->type() == "movegroup_named_state"){
+        actions_.push_back(std::make_shared<MoveGroupNamedState>(action));
       }
     }
 

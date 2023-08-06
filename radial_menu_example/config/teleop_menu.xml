@@ -7,6 +7,11 @@
         <item name="Twist">
             <action type="shared_values" key="yaho" values="a b c d e f gg" method="bidirectional+" initial="1" />
             <action type="publish_shared_value" key="yaho" topic="/yaho_msg" topic_type="std_msgs/String"/>
+            <action type="flipper_named_state" fr_topic="fr_command" fl_topic="fl_command" rr_topic="rr_command" rl_topic="rl_command" 
+                                               fr="3.141592" fl="0." rr="1.57" rl="-1.57" />
+        </item>
+        <item name="Flipper">
+            <action type="flipper_named_state" fr="0." fl="0." rr="-1.57" rl="1.57" />
         </item>
     </item>
     <item name="Arm">

@@ -15,6 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   std_srvs
+  moveit_msgs 
+  moveit_ros_planning_interface
 )
 
 ## System dependencies are found with CMake's conventions
@@ -109,7 +111,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES radial_menu_action
-  CATKIN_DEPENDS nodelet pluginlib radial_menu_msgs roscpp std_msgs std_srvs
+  CATKIN_DEPENDS nodelet pluginlib radial_menu_msgs roscpp std_msgs std_srvs moveit_msgs moveit_ros_planning_interface
 #  DEPENDS system_lib
 )
 
